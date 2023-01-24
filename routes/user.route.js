@@ -50,7 +50,7 @@ app.post("/jobs", async (req, res) => {
 app.delete("/jobs/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const addjobs = await jobModel.findOneAndDelete(id);
+    const addjobs = await jobModel.findOneAndDelete({id});
     res.send({ message: "deleted" });
   } catch (err) {
     res.send("something went wrong");
@@ -60,7 +60,7 @@ app.patch("/jobs/:id", async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
-    const addjobs = await jobModel.findOneAndUpdate(id, data);
+    const addjobs = await jobModel.findOneAndUpdate({id, data});
     res.send({ message: "updated data" });
   } catch (err) {
     res.send("something went wrong");
