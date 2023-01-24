@@ -2,7 +2,7 @@ const { Router } = require("express");
 const UserModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const jobModel= require("../models/job.model")
+const jobModel = require("../models/job.model");
 const app = Router();
 require("dotenv").config();
 
@@ -22,9 +22,13 @@ app.post("/login", async (req, res) => {
   if (user) {
     const validated = await compareIt(password, user.password);
     if (validated) {
-      const token = jwt.sign({ id: user._id, email: user.email }, process.env.SECRET, {
-        expiresIn: "1 day",
-      });
+      const token = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.SECRET,
+        {
+          expiresIn: "1 day",
+        }
+      );
 
       res.send({ message: "login successful", token: token });
     } else {
@@ -35,15 +39,13 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
 app.post("/jobs", async (req, res) => {
- try{
-  const addjobs = await jobModel.create(req.body)
-  res.send({message:"added to jobs"});
- }
- catch(err){
-  res.send("something went wrong")
- }
+  try {
+    const addjobs = await jobModel.create(req.body);
+    res.send({ message: "added to jobs" });
+  } catch (err) {
+    res.send("something went wrong");
+  }
 });
 app.delete("/jobs", async (req, res) => {
   const { id } = req.params;
@@ -54,26 +56,36 @@ app.delete("/jobs", async (req, res) => {
     res.send("something went wrong");
   }
 });
+app.patch("/jobs", async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  try {
+    const addjobs = await jobModel.findOneAndUpdate(id, data);
+    res.send({ message: "updated data" });
+  } catch (err) {
+    res.send("something went wrong");
+  }
+});
 
 app.get("/jobs", async (req, res) => {
   const { page, limit, sort, filter } = req.query;
   // console.log(page, limit, sort, filter);
   if (filter != undefined) {
-    const Jobs = await jobModel.find({ role: filter })
+    const Jobs = await jobModel
+      .find({ role: filter })
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ postedat: sort });
     res.send(Jobs);
   } else {
-    const Jobs = await jobModel.find({})
+    const Jobs = await jobModel
+      .find({})
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ postedat: sort });
     res.send(Jobs);
   }
-  
 });
-
 
 // gives hashed password --secure
 async function hashIt(pass) {
