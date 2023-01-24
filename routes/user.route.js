@@ -45,6 +45,15 @@ app.post("/jobs", async (req, res) => {
   res.send("something went wrong")
  }
 });
+app.delete("/jobs", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const addjobs = await jobModel.findOneAndDelete(id);
+    res.send({ message: "deleted" });
+  } catch (err) {
+    res.send("something went wrong");
+  }
+});
 
 app.get("/jobs", async (req, res) => {
   const { page, limit, sort, filter } = req.query;
