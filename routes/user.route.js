@@ -47,7 +47,7 @@ app.post("/jobs", async (req, res) => {
     res.send("something went wrong");
   }
 });
-app.delete("/jobs", async (req, res) => {
+app.delete("/jobs/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const addjobs = await jobModel.findOneAndDelete(id);
@@ -56,7 +56,7 @@ app.delete("/jobs", async (req, res) => {
     res.send("something went wrong");
   }
 });
-app.patch("/jobs", async (req, res) => {
+app.patch("/jobs/:id", async (req, res) => {
   const { id } = req.params;
   const data = req.body;
   try {
