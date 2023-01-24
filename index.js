@@ -12,7 +12,7 @@ app.use(cors());
 app.use("/user", userRoute);
 app.get("/", (req, res) => res.send("masaijobapp"));
 
-app.listen(8080, async () => {
+app.listen(process.env.PORT, async () => {
   try {
     await connect();
     console.log("server started on port 8080 and mongodb connected");

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const jobModel= require("../models/job.model")
 const app = Router();
+require("dotenv").config();
 
 app.get("/", async (req, res) => {
   res.send("user");
@@ -21,7 +22,7 @@ app.post("/login", async (req, res) => {
   if (user) {
     const validated = await compareIt(password, user.password);
     if (validated) {
-      const token = jwt.sign({ id: user._id, email: user.email }, "SHREE123", {
+      const token = jwt.sign({ id: user._id, email: user.email }, process.env.SECRET, {
         expiresIn: "1 day",
       });
 
